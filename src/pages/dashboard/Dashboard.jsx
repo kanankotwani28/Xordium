@@ -7,23 +7,22 @@ import StatCard from "../../components/Dashboard/StatCard";
 export default function Dashboard() {
   return (
     <>
+      {/* === Stats Section (Boxed) === */}
       {/* === Stats Section === */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="flex flex-col md:flex-row gap-6 w-full mb-8">
         <StatCard title="Verified claims" value="1,243" delta={6}>
           <div className="text-sm text-white/70">Confidence</div>
         </StatCard>
-
         <StatCard title="Pending reviews" value="54" delta={-2}>
           <div className="text-sm text-white/70">Assigned</div>
         </StatCard>
-
         <StatCard title="Alerts today" value="12" delta={10}>
           <div className="text-sm text-white/70">High priority</div>
         </StatCard>
-      </section>
+      </div>
 
       {/* === Secondary Section === */}
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
         <div className="rounded-xl bg-white/5 backdrop-blur-md border border-white/10 p-5 shadow-[0_0_25px_rgba(168,85,247,0.15)] transition-all hover:shadow-[0_0_35px_rgba(168,85,247,0.25)]">
           <h3 className="text-lg font-medium text-white">Recent activity</h3>
@@ -59,7 +58,7 @@ export default function Dashboard() {
             </button>
           </div>
         </div>
-      </section>
+      </div>
     </>
   );
 }

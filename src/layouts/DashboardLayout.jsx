@@ -2,9 +2,20 @@
 import React from "react";
 import Sidebar from "../components/Dashboard/Sidebar";
 import Header from "../components/Dashboard/Header";
+import { useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 
 export default function DashboardLayout() {
+  const location = useLocation();
+  // Map pathnames to page titles
+  let pageTitle = "Overview";
+  if (location.pathname.includes("hot-topics")) pageTitle = "Hot Topics";
+  else if (location.pathname.includes("fake-news")) pageTitle = "Fake News";
+  else if (location.pathname.includes("news-checker"))
+    pageTitle = "News Checker";
+  else if (location.pathname.match(/\/dashboard(\/)?$/))
+    pageTitle = "Dashboard";
+
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-[#050308] via-[#0a0814] to-[#050308] overflow-hidden text-white">
       {/* === Background Layers (Soft Glow + Grid Pattern) === */}
@@ -28,12 +39,12 @@ export default function DashboardLayout() {
         <Sidebar />
 
         {/* === Right: Main Dashboard Content === */}
-        <main className="flex flex-col space-y-8">
-          {/* Header stays visible across all pages */}
-          <Header />
+        <main className="flex flex-col space-y-8 min-w-0">
+          {/* Header with dynamic title */}
+          <Header title={pageTitle} />
 
           {/* Dynamic content area - page changes here */}
-          <section className="rounded-xl bg-gray-700/30 backdrop-blur-md border border-purple-400/20 shadow-[0_0_25px_rgba(168,85,247,0.2)] p-6 min-h-[80vh] transition-all duration-300">
+          <section className="rounded-xl bg-gray-700/30 backdrop-blur-md border border-purple-400/20 shadow-[0_0_25px_rgba(168,85,247,0.2)] p-6 min-h-[80vh] transition-all duration-300 overflow-x-hidden">
             {/* 👇 This displays whatever route is active */}
             <Outlet />
           </section>
