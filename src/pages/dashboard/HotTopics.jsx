@@ -1,29 +1,131 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function HotTopics() {
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Replace with your real key or set REACT_APP_NEWSAPI_KEY in .env
+  const API_KEY = import.meta.env.VITE_NEWS_API_KEY || "API_KEY";
+  const ENDPOINT = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${API_KEY}`;
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    setError(null);
+
+    fetch(ENDPOINT)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        if (!mounted) return;
+        if (data.status !== "ok") {
+          setError("Failed to load news");
+          setArticles([]);
+        } else {
+          setArticles(
+            Array.isArray(data.articles) ? data.articles.slice(0, 10) : []
+          );
+        }
+      })
+      .catch((err) => {
+        if (!mounted) return;
+        setError(err.message || "An error occurred");
+      })
+      .finally(() => {
+        if (!mounted) return;
+        setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [ENDPOINT]);
+
   return (
     <section className="bg-gray-600/30 backdrop-blur-md rounded-xl p-6 border border-purple-500/20 shadow-[0_0_25px_rgba(168,85,247,0.2)]">
-      <h2 className="text-xl font-semibold text-white mb-3">🔥 Hot Topics</h2>
-      <p className="text-white/70 text-sm mb-5">
-        Here are the currently trending news claims being verified.
-      </p>
-
-      <div className="space-y-4">
-        <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition">
-          <h3 className="font-medium text-white">“AI can predict earthquakes”</h3>
-          <p className="text-sm text-white/60">Under review • Added 5 hours ago</p>
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <h2 className="text-xl font-semibold text-white">🔥 Hot Topics</h2>
+          <p className="text-white/70 text-sm">
+            Currently trending BBC headlines
+          </p>
         </div>
-
-        <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition">
-          <h3 className="font-medium text-white">“Water turns to gold with magnet”</h3>
-          <p className="text-sm text-white/60">Flagged as false • Added yesterday</p>
-        </div>
-
-        <div className="p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition">
-          <h3 className="font-medium text-white">“Mars base confirmed for 2025”</h3>
-          <p className="text-sm text-white/60">Pending verification • Added today</p>
+        <div className="text-sm text-white/60">
+          {loading ? "Loading..." : `${articles.length} items`}
         </div>
       </div>
+
+      {error && (
+        <div className="mb-4 text-sm text-red-300">
+          Error loading news: {error}
+        </div>
+      )}
+
+      {loading && !error ? (
+        <div className="grid gap-3">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="p-3 rounded-lg bg-white/5 border border-white/6 animate-pulse"
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {articles.map((a, idx) => (
+            <a
+              key={a.url || idx}
+              href={a.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-shadow shadow-sm"
+              aria-label={`Open article: ${a.title}`}
+            >
+              <div className="flex gap-4 items-start">
+                {a.urlToImage ? (
+                  <img
+                    src={a.urlToImage}
+                    alt={a.title || "article image"}
+                    className="w-24 h-16 rounded-md object-cover flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-24 h-16 rounded-md bg-white/6 flex-shrink-0" />
+                )}
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="font-medium text-white truncate">
+                      {a.title}
+                    </h3>
+                    <span className="text-xs text-white/60 whitespace-nowrap">
+                      {a.source?.name || "BBC"} •{" "}
+                      {new Date(a.publishedAt).toLocaleString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </span>
+                  </div>
+
+                  {a.description && (
+                    <p className="text-sm text-white/60 mt-2 line-clamp-2">
+                      {a.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </a>
+          ))}
+
+          {articles.length === 0 && !loading && (
+            <div className="text-sm text-white/60">No articles found.</div>
+          )}
+        </div>
+      )}
     </section>
   );
 }
