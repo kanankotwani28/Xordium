@@ -12,7 +12,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#07060a] text-gray-100 antialiased">
       <Navbar />
-      <main className="px-6 md:px-12 lg:px-24">
+      <main className="px-4 md:px-10 lg:px-24">
         {/* selection section with patterned grid + subtle moving gradient background */}
         <section className="w-full h-[80vh] relative overflow-hidden rounded-2xl">
           <svg
