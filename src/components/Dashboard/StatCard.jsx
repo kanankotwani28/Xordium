@@ -3,7 +3,7 @@ import React from "react";
 
 export default function StatCard({ title, value, delta, children }) {
     return (
-        <div className="rounded-lg bg-gray-20/60 border border-white-8 p-4">
+        <div className="rounded-lg  border-[0.25px] border-gray-8 p-4">
             <div className="flex items-center justify-between">
                 <div>
                     <div className="text-sm text-white-70">{title}</div>
