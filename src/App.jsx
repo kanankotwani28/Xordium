@@ -11,7 +11,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#07060a] text-gray-100 antialiased">
       <Navbar />
-      <main className="px-6 md:px-12 lg:px-24">
+      <main className="px-4 md:px-10 lg:px-24">
         <Hero />
         <Trusted />
         <Features />

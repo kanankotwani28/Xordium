@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function GridBackground({
+export default function GridComponent({
   color = "rgba(168,85,247,0.15)", // default purple glow
   thickness = "2px",
   spacing = "80px",
