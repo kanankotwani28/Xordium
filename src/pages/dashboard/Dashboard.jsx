@@ -1,10 +1,18 @@
 // src/pages/dashboard/Dashboard.jsx
-import React from "react";
+import React, { useState } from "react";
 // import Sidebar from "../../components/Dashboard/Sidebar";
 // import Header from "../../components/Dashboard/Header";
 import StatCard from "../../components/Dashboard/StatCard";
+import CreateReportModal from "../../components/CreateReportModal";
 
 export default function Dashboard() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  function handleSubmitReport(data) {
+    // TODO: wire this to your backend / state management.
+    // For now we just log it and close the modal.
+    console.log("New report submitted:", data);
+  }
   return (
     <>
       {/* === Stats Section (Boxed) === */}
@@ -47,8 +55,11 @@ export default function Dashboard() {
         <div className="rounded-xl bg-white/5 backdrop-blur-md border border-white/10 p-5 shadow-[0_0_25px_rgba(168,85,247,0.15)] transition-all hover:shadow-[0_0_35px_rgba(168,85,247,0.25)]">
           <h3 className="text-lg font-medium text-white">Quick actions</h3>
           <div className="mt-5 flex flex-col gap-3">
-            <button className="py-2 rounded-md bg-gradient-to-r from-purple-500 to-fuchsia-600 text-white font-medium hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition">
-              Create new verification
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="py-2 rounded-md bg-gradient-to-r from-purple-500 to-fuchsia-600 text-white font-medium hover:shadow-[0_0_15px_rgba(168,85,247,0.4)] transition"
+            >
+              Create new report
             </button>
             <button className="py-2 rounded-md border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition">
               Import sources
@@ -59,6 +70,11 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      <CreateReportModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleSubmitReport}
+      />
     </>
   );
 }

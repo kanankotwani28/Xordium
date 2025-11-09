@@ -49,7 +49,7 @@ export default function HotTopics() {
     <section className="p-0 overflow-x-hidden">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h2 className="text-xl font-semibold text-white">🔥 Hot Topics</h2>
+          {/* <h2 className="text-xl font-semibold text-white">🔥 Hot Topics</h2> */}
           <p className="text-white/70 text-sm">
             Currently trending BBC headlines
           </p>
