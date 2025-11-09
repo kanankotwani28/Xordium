@@ -46,7 +46,7 @@ export default function HotTopics() {
   }, [ENDPOINT]);
 
   return (
-    <section className="bg-gray-600/30 backdrop-blur-md rounded-xl p-6 border border-purple-500/20 shadow-[0_0_25px_rgba(168,85,247,0.2)] overflow-x-hidden">
+    <section className="p-0 overflow-x-hidden">
       <div className="flex items-start justify-between mb-4">
         <div>
           <h2 className="text-xl font-semibold text-white">🔥 Hot Topics</h2>
@@ -136,7 +136,9 @@ export default function HotTopics() {
                     aria-expanded={expanded}
                     className="text-sm font-medium text-purple-300 hover:text-purple-200 underline underline-offset-4"
                   >
-                    {expanded ? "Show less" : `Read more (${articles.length - 3} more)`}
+                    {expanded
+                      ? "Show less"
+                      : `Read more (${articles.length - 3} more)`}
                   </button>
                 </div>
               )}

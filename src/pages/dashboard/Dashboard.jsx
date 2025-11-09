@@ -8,18 +8,17 @@ export default function Dashboard() {
   return (
     <>
       {/* === Stats Section (Boxed) === */}
-      <div className="rounded-xl bg-white/5 backdrop-blur-md border border-white/10 p-5 pb-10 shadow-[0_0_25px_rgba(168,85,247,0.15)] transition-all hover:shadow-[0_0_35px_rgba(168,85,247,0.25)] mb-8">
-        <div className="flex flex-col md:flex-row gap-6 w-full">
-          <StatCard title="Verified claims" value="1,243" delta={6}>
-            <div className="text-sm text-white/70">Confidence</div>
-          </StatCard>
-          <StatCard title="Pending reviews" value="54" delta={-2}>
-            <div className="text-sm text-white/70">Assigned</div>
-          </StatCard>
-          <StatCard title="Alerts today" value="12" delta={10}>
-            <div className="text-sm text-white/70">High priority</div>
-          </StatCard>
-        </div>
+      {/* === Stats Section === */}
+      <div className="flex flex-col md:flex-row gap-6 w-full mb-8">
+        <StatCard title="Verified claims" value="1,243" delta={6}>
+          <div className="text-sm text-white/70">Confidence</div>
+        </StatCard>
+        <StatCard title="Pending reviews" value="54" delta={-2}>
+          <div className="text-sm text-white/70">Assigned</div>
+        </StatCard>
+        <StatCard title="Alerts today" value="12" delta={10}>
+          <div className="text-sm text-white/70">High priority</div>
+        </StatCard>
       </div>
 
       {/* === Secondary Section === */}
