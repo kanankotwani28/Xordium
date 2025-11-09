@@ -21,6 +21,9 @@ import Auth from "./pages/Login"; // combined auth page (Login + Signup tabs). U
 import Dashboard from "./pages/dashboard/Dashboard";
 import NotFound from "./pages/NotFound";
 
+//Routes
+import DashboardRoute from "./routes/DashboardRoute";
+
 export default function App() {
   // Inline Home component preserving your original landing structure
   const Home = () => (
@@ -108,7 +111,7 @@ export default function App() {
                 path="/dashboard/*"
                 element={
                   <ProtectedRoute>
-                    <Dashboard />
+                    <DashboardRoute />
                   </ProtectedRoute>
                 }
               />
