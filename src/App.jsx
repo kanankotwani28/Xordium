@@ -11,7 +11,7 @@ import Section from "./components/Section";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#07060a] text-gray-100 antialiased">
+    <div className="min-h-screen text-gray-100 antialiased">
       {/* <main className="px-6 md:px-12 lg:px-24"> */}
       <main>
         <Section className="grid grid-rows-[auto,1fr]">
