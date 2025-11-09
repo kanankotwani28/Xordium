@@ -67,3 +67,59 @@ h1 {
     background-position: 200px 200px, 200px 200px;
   }
 }
+
+/* === Global Scrollbar Styling === */
+
+/* For WebKit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a090f; /* slightly off-black */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #9855ff 0%, #8c45ff 100%);
+  border-radius: 10px;
+  border: 2px solid #0a090f; /* creates a small inset space */
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #a975ff 0%, #9855ff 100%);
+}
+
+/* Scrollbar buttons (arrows) */
+::-webkit-scrollbar-button {
+  background-color: #0a090f;
+  height: 16px;
+  width: 16px;
+  display: block;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-button:single-button:vertical:decrement {
+  background: url("data:image/svg+xml;utf8,<svg fill='%239855FF' height='8' viewBox='0 0 24 24' width='8' xmlns='http://www.w3.org/2000/svg'><path d='M7 14l5-5 5 5z'/></svg>")
+    center no-repeat;
+}
+::-webkit-scrollbar-button:single-button:vertical:increment {
+  background: url("data:image/svg+xml;utf8,<svg fill='%239855FF' height='8' viewBox='0 0 24 24' width='8' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")
+    center no-repeat;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #9855ff 0%, #8c45ff 100%);
+  border-radius: 10px;
+  border: 2px solid #0a090f;
+  box-shadow: 0 0 8px rgba(140, 69, 255, 0.4);
+}
+
+
+/* Firefox (using new scrollbar-color property) */
+* {
+  scrollbar-color: #9855ff #0a090f; /* thumb color | track color */
+  scrollbar-width: thin;
+}
