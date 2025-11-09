@@ -7,24 +7,21 @@ import {
 import { sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
-
-
 export default function Login() {
-    // 🔽 1. All useState hooks go here
     const navigate = useNavigate();
     const [signIn, setSignIn] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [name, setName] = useState(""); // optional
+    const [name, setName] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    // 🔽 2. Firebase handler
     const handleSubmit = async () => {
         setLoading(true);
         setError("");
+        setSuccess("");
 
         if (!email || !email.includes("@")) {
             setError("Please enter a valid email.");
@@ -41,75 +38,81 @@ export default function Login() {
         try {
             if (signIn) {
                 await signInWithEmailAndPassword(auth, email, password);
-                setError(""); // clear error
                 setSuccess("Login successful!");
-                setTimeout(() => {
-                    navigate("/dashboard");
-                }, 1000);
+                setTimeout(() => navigate("/dashboard"), 800);
             } else {
                 await createUserWithEmailAndPassword(auth, email, password);
-                setError(""); // clear error
                 setSuccess("Account created successfully! You can now login.");
             }
         } catch (error) {
             console.error("🔥 Firebase error:", error);
-
-            if (error.code === "auth/invalid-email") {
-                setError("Invalid email format.");
-            } else if (error.code === "auth/email-already-in-use") {
+            if (error.code === "auth/invalid-email") setError("Invalid email format.");
+            else if (error.code === "auth/email-already-in-use")
                 setError("Email already in use. Try logging in.");
-            } else if (error.code === "auth/user-not-found") {
+            else if (error.code === "auth/user-not-found")
                 setError("No account found with this email.");
-            } else if (error.code === "auth/wrong-password") {
+            else if (error.code === "auth/wrong-password")
                 setError("Incorrect password.");
-            } else {
-                setError("Authentication failed. Try again.");
-            }
+            else setError("Authentication failed. Try again.");
         } finally {
             setLoading(false);
         }
     };
 
-
     return (
-        <div className="flex items-center justify-center min-h-screen w-full bg-[#f6f5f7] px-4 py-8">
-            <div className="relative w-[678px] max-w-full min-h-[400px] bg-white rounded-lg shadow-[0_14px_28px_rgba(0,0,0,0.25),_0_10px_10px_rgba(0,0,0,0.22)] overflow-hidden font-[Montserrat]">
-                {/* Sign Up */}
+        <div className="relative min-h-screen flex items-center justify-center bg-[#07060a] overflow-hidden">
+            {/* Gradient Pattern Background */}
+            <div
+                className="absolute inset-0 opacity-[0.25] mix-blend-screen pointer-events-none"
+                style={{
+                    backgroundImage: `
+            radial-gradient(rgba(168,85,247,0.3) 1px, transparent 1px),
+            radial-gradient(rgba(168,85,247,0.15) 1px, transparent 1px)
+          `,
+                    backgroundSize: "40px 40px, 80px 80px",
+                    backgroundPosition: "0 0, 20px 20px",
+                    filter: "drop-shadow(0 0 8px rgba(168,85,247,0.25))",
+                }}
+            ></div>
+
+            {/* Form Card Container */}
+            <div className="relative w-[720px] max-w-full min-h-[420px] rounded-2xl overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.7)] z-10">
+                {/* Sign Up Panel */}
                 <div
-                    className={`absolute top-0 h-full transition-all duration-500 ease-in-out left-0 w-1/2 opacity-0 z-[1] ${!signIn ? "translate-x-full opacity-100 z-[5]" : ""
+                    className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-500 ease-in-out ${!signIn ? "translate-x-full opacity-100 z-[5]" : "opacity-0 z-[1]"
                         }`}
                 >
-                    <form className="bg-white flex items-center justify-center flex-col px-[50px] h-full text-center">
+                    <form className="bg-[#18141d] flex items-center justify-center flex-col px-[50px] h-full text-center">
+                        <h1 className="font-semibold text-2xl text-white">Create Account</h1>
 
-                        <h1 className="font-bold m-0 text-xl">Create Account</h1>
                         <input
                             type="text"
-                            placeholder="Name"
-                            className="bg-gray-200 border-none py-3 px-4 my-2 w-full"
+                            placeholder="Full name"
+                            className="mt-6 w-full rounded-md bg-[#222030] border border-[#3a3750] py-3 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-[#8C45FF]"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
                         <input
                             type="email"
                             placeholder="Email"
-                            className="bg-gray-200 border-none py-3 px-4 my-2 w-full"
+                            className="mt-3 w-full rounded-md bg-[#222030] border border-[#3a3750] py-3 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-[#8C45FF]"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                        <div className="w-full relative">
+                        <div className="w-full relative mt-3">
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="bg-gray-200 border-none py-3 px-4 my-2 w-full"
+                                className="w-full rounded-md bg-[#222030] border border-[#3a3750] py-3 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-[#8C45FF]"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword((prev) => !prev)}
-                                className="absolute right-3 top-[50%] translate-y-[-50%] text-sm text-gray-600"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400"
                             >
-                                {showPassword ? "Show" : <s>Show</s>}
+                                {showPassword ? "Hide" : "Show"}
                             </button>
                         </div>
 
@@ -117,121 +120,122 @@ export default function Login() {
                             type="button"
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="rounded-full border border-[#ff4b2b] bg-[#ff4b2b] text-white text-xs font-bold py-3 px-12 uppercase tracking-wider active:scale-95 focus:outline-none"
+                            className="mt-6 rounded-full py-3 px-12 text-sm font-semibold text-white tracking-wider bg-gradient-to-r from-[#8C45FF] to-[#602A9A] hover:brightness-110 active:scale-95 transition-all"
                         >
                             {loading ? "Please wait..." : "Sign Up"}
                         </button>
+
                         {error && (
-                            <p className="text-red-600 text-sm bg-red-100 px-3 py-2 rounded w-full my-2">
+                            <p className="text-red-400 text-sm bg-red-950/40 px-3 py-2 rounded w-full my-3">
                                 {error}
                             </p>
                         )}
                         {success && (
-                            <p className="text-green-600 text-sm bg-green-100 px-3 py-2 rounded w-full my-2">
+                            <p className="text-green-400 text-sm bg-green-950/40 px-3 py-2 rounded w-full my-3">
                                 {success}
                             </p>
                         )}
                     </form>
                 </div>
 
-                {/* Sign In */}
+                {/* Sign In Panel */}
                 <div
-                    className={`absolute top-0 h-full transition-all duration-500 ease-in-out left-0 w-1/2 z-[2] ${!signIn ? "translate-x-full" : ""
+                    className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-500 ease-in-out z-[2] ${!signIn ? "translate-x-full" : "translate-x-0"
                         }`}
                 >
-                    <form className="bg-white flex items-center justify-center flex-col px-[50px] h-full text-center">
+                    <form className="bg-[#18141d] flex items-center justify-center flex-col px-[50px] h-full text-center">
+                        <h1 className="font-semibold text-2xl text-white">Sign In</h1>
 
-                        <h1 className="font-bold m-0 text-xl">Sign in</h1>
                         <input
                             type="email"
                             placeholder="Email"
-                            className="bg-gray-200 border-none py-3 px-4 my-2 w-full"
+                            className="mt-6 w-full rounded-md bg-[#222030] border border-[#3a3750] py-3 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-[#8C45FF]"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                        <div className="w-full relative">
+                        <div className="w-full relative mt-3">
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="bg-gray-200 border-none py-3 px-4 my-2 w-full"
+                                className="w-full rounded-md bg-[#222030] border border-[#3a3750] py-3 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-[#8C45FF]"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword((prev) => !prev)}
-                                className="absolute right-3 top-[50%] translate-y-[-50%] text-sm text-gray-600"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400"
                             >
-                                {showPassword ? "Show" : <s>Show</s>}
+                                {showPassword ? "Hide" : "Show"}
                             </button>
                         </div>
-                        <a
-                            href="#"
-                            className="text-sm text-gray-700 my-3"
-                        >
+
+                        <a href="#" className="text-sm text-gray-400 my-3">
                             Forgot your password?
                         </a>
+
                         <button
                             type="button"
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="rounded-full border border-[#ff4b2b] bg-[#ff4b2b] text-white text-xs font-bold py-3 px-12 uppercase tracking-wider active:scale-95 focus:outline-none"
+                            className="mt-2 rounded-full py-3 px-12 text-sm font-semibold text-white tracking-wider bg-gradient-to-r from-[#8C45FF] to-[#602A9A] hover:brightness-110 active:scale-95 transition-all"
                         >
                             {loading ? "Please wait..." : "Sign In"}
                         </button>
+
                         {error && (
-                            <p className="text-red-600 text-sm bg-red-100 px-3 py-2 rounded w-full my-2">
+                            <p className="text-red-400 text-sm bg-red-950/40 px-3 py-2 rounded w-full my-3">
                                 {error}
                             </p>
                         )}
                         {success && (
-                            <p className="text-green-600 text-sm bg-green-100 px-3 py-2 rounded w-full my-2">
+                            <p className="text-green-400 text-sm bg-green-950/40 px-3 py-2 rounded w-full my-3">
                                 {success}
                             </p>
                         )}
                     </form>
                 </div>
 
-                {/* Overlay Container */}
+                {/* Overlay Section */}
                 <div
                     className={`absolute top-0 left-1/2 w-1/2 h-full overflow-hidden transition-transform duration-500 ease-in-out z-[100] ${!signIn ? "-translate-x-full" : ""
                         }`}
                 >
                     <div
-                        className={`bg-gradient-to-r from-[#ff4b2b] to-[#ff416c] bg-no-repeat bg-cover bg-left text-white relative left-[-100%] h-full w-[200%] transition-transform duration-500 ease-in-out ${!signIn ? "translate-x-1/2" : ""
+                        className={`relative left-[-100%] h-full w-[200%] transition-transform duration-500 ease-in-out ${!signIn ? "translate-x-1/2" : ""
                             }`}
                     >
-                        {/* Left Panel */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#8C45FF] to-[#602A9A]" />
+
                         <div
-                            className={`absolute flex items-center justify-center flex-col px-10 text-center top-0 h-full w-1/2 transition-transform duration-500 ease-in-out ${!signIn ? "translate-x-0" : "-translate-x-1/5"
+                            className={`absolute left-0 w-1/2 h-full flex flex-col items-center justify-center px-10 text-center text-white transition-transform duration-500 ${!signIn ? "translate-x-0" : "-translate-x-5"
                                 }`}
                         >
-                            <h1 className="font-bold text-2xl">Welcome Back!</h1>
-                            <p className="text-sm font-light leading-5 tracking-wide my-6">
-                                To keep connected with us please login with your personal info
+                            <h2 className="text-2xl font-bold">Welcome Back!</h2>
+                            <p className="text-sm mt-3 text-white/85">
+                                To keep connected with us, please log in with your credentials.
                             </p>
                             <button
                                 type="button"
-                                className="rounded-full border border-white bg-transparent text-white text-xs font-bold py-3 px-12 uppercase tracking-wider active:scale-95 focus:outline-none"
                                 onClick={() => setSignIn(true)}
+                                className="mt-6 rounded-full py-3 px-10 text-sm font-semibold bg-white text-[#602A9A] hover:bg-white/90 transition-all"
                             >
                                 Sign In
                             </button>
                         </div>
 
-                        {/* Right Panel */}
                         <div
-                            className={`absolute right-0 flex items-center justify-center flex-col px-10 text-center top-0 h-full w-1/2 transition-transform duration-500 ease-in-out ${!signIn ? "translate-x-1/5" : "translate-x-0"
+                            className={`absolute right-0 w-1/2 h-full flex flex-col items-center justify-center px-10 text-center text-white transition-transform duration-500 ${!signIn ? "translate-x-3" : "translate-x-0"
                                 }`}
                         >
-                            <h1 className="font-bold text-2xl">Hello, Friend!</h1>
-                            <p className="text-sm font-light leading-5 tracking-wide my-6">
-                                Enter your personal details and start journey with us
+                            <h2 className="text-2xl font-bold">Hello, Friend!</h2>
+                            <p className="text-sm mt-3 text-white/85">
+                                Enter your personal details and start your journey with us.
                             </p>
                             <button
                                 type="button"
-                                className="rounded-full border border-white bg-transparent text-white text-xs font-bold py-3 px-12 uppercase tracking-wider active:scale-95 focus:outline-none"
                                 onClick={() => setSignIn(false)}
+                                className="mt-6 rounded-full py-3 px-10 text-sm font-semibold border border-white/40 text-white hover:bg-white/10 transition-all"
                             >
                                 Sign Up
                             </button>
