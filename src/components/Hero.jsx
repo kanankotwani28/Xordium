@@ -2,9 +2,14 @@ export default function Hero() {
   return (
     <section className="mt-28 grid gap-8 md:grid-cols-2 items-center">
       <div>
-        <span className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-black text-xs px-3 py-1 rounded-full">
-          Latest integration just arrived
-        </span>
+        <div className="w-full mx-auto">
+          <span className="inline-flex items-center justify-center px-3 py-0.5 text-xs font-semibold rounded-full bg-[#9855ff] text-black">
+            NEW
+          </span>
+          <span className="inline-block text-[#9855FF] text-lg px-3 py-1 rounded-full">
+            Latest integration just arrived
+          </span>
+        </div>
         <h1 className="mt-6 text-4xl md:text-5xl font-extrabold leading-tight">
           Verify News
           <br />
