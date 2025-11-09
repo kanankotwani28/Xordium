@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Trusted from "./components/Trusted";
 import Features from "./components/Features";
+import VerifyFeatures from "./components/VerifyFeatures.jsx";
 import Clients from "./components/Clients";
 import Pricing from "./components/Pricing";
 import CTA from "./components/CTA";
@@ -19,7 +20,8 @@ export default function App() {
         </Section>
         <Trusted />
         <Features />
-        <Clients />
+        <VerifyFeatures />
+        {/* <Clients /> */}
         <Pricing />
         <CTA />
       </main>
