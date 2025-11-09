@@ -1,3 +1,5 @@
+import { NavLink } from 'react-router-dom';
+
 export default function Hero() {
   return (
     <section className="mt-28 grid gap-8 md:grid-cols-2 items-center">
@@ -23,12 +25,11 @@ export default function Hero() {
           SEO-focused insights.
         </p>
         <div className="mt-6 flex gap-3">
-          <button className="rounded-full bg-white px-4 py-2 text-black font-medium shadow-md">
-            Start for free
-          </button>
-          <button className="rounded-full border border-white/10 px-4 py-2 text-sm">
-            How it works
-          </button>
+          <NavLink to="/auth" exact>
+            <button className="rounded-full bg-white px-4 py-2 text-black font-medium shadow-md">
+              Start for free
+            </button>
+          </NavLink>
         </div>
       </div>
 
