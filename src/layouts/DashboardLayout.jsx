@@ -28,12 +28,12 @@ export default function DashboardLayout() {
         <Sidebar />
 
         {/* === Right: Main Dashboard Content === */}
-        <main className="flex flex-col space-y-8">
+  <main className="flex flex-col space-y-8 min-w-0">
           {/* Header stays visible across all pages */}
           <Header />
 
           {/* Dynamic content area - page changes here */}
-          <section className="rounded-xl bg-gray-700/30 backdrop-blur-md border border-purple-400/20 shadow-[0_0_25px_rgba(168,85,247,0.2)] p-6 min-h-[80vh] transition-all duration-300">
+          <section className="rounded-xl bg-gray-700/30 backdrop-blur-md border border-purple-400/20 shadow-[0_0_25px_rgba(168,85,247,0.2)] p-6 min-h-[80vh] transition-all duration-300 overflow-x-hidden">
             {/* 👇 This displays whatever route is active */}
             <Outlet />
           </section>

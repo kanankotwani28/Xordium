@@ -45,7 +45,7 @@ export default function HotTopics() {
   }, [ENDPOINT]);
 
   return (
-    <section className="bg-gray-600/30 backdrop-blur-md rounded-xl p-6 border border-purple-500/20 shadow-[0_0_25px_rgba(168,85,247,0.2)]">
+    <section className="bg-gray-600/30 backdrop-blur-md rounded-xl p-6 border border-purple-500/20 shadow-[0_0_25px_rgba(168,85,247,0.2)] overflow-x-hidden">
       <div className="flex items-start justify-between mb-4">
         <div>
           <h2 className="text-xl font-semibold text-white">🔥 Hot Topics</h2>
@@ -81,7 +81,7 @@ export default function HotTopics() {
               href={a.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-shadow shadow-sm"
+              className="group block p-4 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-shadow shadow-sm overflow-hidden max-w-full"
               aria-label={`Open article: ${a.title}`}
             >
               <div className="flex gap-4 items-start">
@@ -96,11 +96,11 @@ export default function HotTopics() {
                 )}
 
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center justify-between gap-3 min-w-0">
                     <h3 className="font-medium text-white truncate">
                       {a.title}
                     </h3>
-                    <span className="text-xs text-white/60 whitespace-nowrap">
+                    <span className="text-xs text-white/60 whitespace-nowrap flex-shrink-0">
                       {a.source?.name || "BBC"} •{" "}
                       {new Date(a.publishedAt).toLocaleString(undefined, {
                         month: "short",
