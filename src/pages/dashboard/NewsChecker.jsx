@@ -6,8 +6,8 @@ export default function NewsChecker() {
   const [checkedRaw, setCheckedRaw] = useState(null); // will show the answer to the question
   const [loading, setLoading] = useState(false);
 
-  // sample local news-analysis data (use your actual variable if available)
-  const newsData = {
+  // sample fallback news-analysis data (used if the API call fails)
+  const sampleNewsData = {
     article_id: "euo1GAJ1HVp74Omey1kK",
     score: 19,
     label: "fake",
@@ -17,7 +17,7 @@ export default function NewsChecker() {
       "High emotional tone (sentiment magnitude ≈ 3.69)",
       "Topical category hints: Cancer, Offbeat, Health News",
       "Key entities: Experts, cancer",
-      "Sensational terms in text: banned, cure, miracle, shocking",
+      'Sensational terms in text: banned, cure, miracle, shocking',
       'Notable line: "SHOCKING discovery banned by officials!"',
     ],
     features: {
@@ -34,6 +34,28 @@ export default function NewsChecker() {
         "Other flagged sentence here",
       ],
     },
+  };
+
+  // helper to call the backend analysis API
+  const fetchAnalysis = async (articleText) => {
+    try {
+      const resp = await fetch("http://127.0.0.1:8002/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ input: articleText }),
+      });
+      if (!resp.ok) {
+        throw new Error(`API error: ${resp.status} ${resp.statusText}`);
+      }
+      const json = await resp.json();
+      return json;
+    } catch (err) {
+      console.warn("fetchAnalysis failed, using fallback sample data:", err);
+      // return fallback sample so the UI remains usable
+      return sampleNewsData;
+    }
   };
 
   const clamp = (v, a = 0, b = 100) => Math.max(a, Math.min(b, v ?? 0));
@@ -159,6 +181,7 @@ export default function NewsChecker() {
     return clamp((s / (s + 50)) * 100);
   };
 
+  // updated handleCheck: fetch analysis (if needed) and answer the user's question
   const handleCheck = async () => {
     if (!query.trim()) {
       setCheckedRaw("Please enter a question.");
@@ -170,19 +193,31 @@ export default function NewsChecker() {
     setCheckedRaw(null);
 
     try {
-      // use local newsData instead of API
-      const data = newsData;
+      // decide what text to send to the analysis API:
+      // If user pasted a long article (heuristic: >200 chars), analyze that;
+      // otherwise call the API with a sample article (fallback) so we can still answer questions.
+      let articleToAnalyze = null;
+      if (query.trim().length > 200) {
+        articleToAnalyze = query.trim();
+      } else {
+        // a short query is treated as a question; use a sample article for analysis
+        articleToAnalyze =
+          "SHOCKING discovery banned by officials! Experts claim to have found a miracle cure for cancer that has been suppressed by authorities. This groundbreaking treatment has shown incredible results in early trials, offering new hope to patients worldwide. However, skeptics urge caution, citing the need for further research and validation. Stay tuned for more updates on this developing story.";
+      }
 
-      // set the detailed result panel as before
+      // call backend (or fallback)
+      const data = await fetchAnalysis(articleToAnalyze);
+
+      // set the detailed result panel
       setResult(data);
 
-      // compute a concise answer for the user's question using the local data
+      // compute a concise answer for the user's question using the returned data
       const answer = answerFromData(query, data);
       setCheckedRaw(answer);
 
-      console.log("Using local data for answer:", answer);
+      console.log("Analysis used for answer:", answer);
     } catch (err) {
-      console.log("Local processing error:", err);
+      console.log("Processing error:", err);
       setCheckedRaw(`Error: ${err.message || "Processing failed"}`);
     } finally {
       setLoading(false);
